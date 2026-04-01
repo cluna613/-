@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>纸上旧梦：中国女性文学人格测试</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f4f1ea; 
+            --text-color: #2c2e2f;
+            --accent-color: #8a3324; /* 胭脂/赭石 */
+            --border-color: #d1c7b7;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Serif SC', serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            line-height: 1.8;
+            background-image: url('https://images.unsplash.com/photo-1616423640733-46889eb254a6?auto=format&fit=crop&q=80&w=2000'); /* 宣纸质感底图 */
+            background-size: cover;
+            background-attachment: fixed;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* 遮罩层增加呼吸感 */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(244, 241, 234, 0.6);
+            z-index: 1;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 700px;
+            padding: 40px;
+            background: var(--glass-bg);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+            border-radius: 2px;
+            position: relative;
+            z-index: 2;
+            border: 1px solid rgba(138, 51, 36, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 { font-size: 26px; letter-spacing: 6px; color: var(--accent-color); margin-bottom: 5px; font-weight: 700; }
+        .subtitle { font-size: 13px; color: #888; letter-spacing: 3px; margin-bottom: 40px; text-transform: uppercase; }
+
+        /* 进度条 */
+        .progress-container { width: 100%; height: 1px; background: #e0dcd3; margin-bottom: 40px; position: relative; }
+        .progress-bar { height: 2px; background: var(--accent-color); width: 0%; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); position: absolute; top: -0.5px; }
+
+        .question-box h2 { font-size: 19px; font-weight: 500; margin-bottom: 35px; min-height: 50px; color: #444; }
+
+        .options-list { display: flex; flex-direction: column; gap: 15px; }
+        
+        /* 选项按钮 - 彻底解决状态残留 */
+        .option-btn {
+            background: #fff !important;
+            border: 1px solid var(--border-color);
+            padding: 16px 22px;
+            font-family: inherit;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            outline: none !important;
+            color: var(--text-color);
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-btn:hover {
+            border-color: var(--accent-color);
+            background-color: #fdfaf5 !important;
+            padding-left: 28px;
+        }
+
+        /* 点击瞬时的视觉反馈，但不留痕迹 */
+        .option-btn:active { background-color: #eee !important; }
+
+        /* 结果页 */
+        .result-image {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            margin-bottom: 30px;
+            filter: grayscale(30%) sepia(20%);
+            border: 1px solid var(--border-color);
+        }
+
+        .result-card { text-align: left; animation: fadeIn 1.5s ease; }
+        .result-name { font-size: 30px; color: var(--accent-color); display: block; border-bottom: 1px solid var(--accent-color); padding-bottom: 10px; margin-bottom: 20px; }
+        .result-quote { font-style: italic; color: #555; margin-bottom: 30px; display: block; font-size: 17px; line-height: 1.6; border-left: 3px solid var(--accent-color); padding-left: 15px; }
+        
+        .result-section { margin-bottom: 25px; font-size: 15px; }
+        .section-title { font-weight: 700; color: var(--accent-color); display: block; margin-bottom: 8px; letter-spacing: 1px; }
+        .section-content { color: #555; text-align: justify; }
+        
+        .hidden { display: none; }
+        .btn-action { margin-top: 30px; background: none; border: 1px solid var(--accent-color); color: var(--accent-color); padding: 12px 35px; cursor: pointer; font-family: inherit; letter-spacing: 2px; transition: 0.3s; }
+        .btn-action:hover { background: var(--accent-color); color: white; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        @media (max-width: 480px) {
+            .container { padding: 30px 20px; }
+            h1 { font-size: 22px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="overlay"></div>
+
+<div class="container" id="main-container">
+    <div id="start-page">
+        <h1>纸上旧梦</h1>
+        <div class="subtitle">Finding Your Literary Silhouette</div>
+        <p style="font-size: 15px; color: #666;">
+            溯游而上，去赴一场跨越时光的邀约。<br>
+            在那些墨色尚未凝固的篇章里，<br>
+            藏着你灵魂的镜像。
+        </p>
+        <button class="btn-action" onclick="startQuiz()">拨开云烟</button>
+    </div>
+
+    <div id="quiz-page" class="hidden">
+        <div class="progress-container"><div class="progress-bar" id="progress"></div></div>
+        <div class="question-box">
+            <h2 id="question-text"></h2>
+            <div class="options-list" id="options-list"></div>
+        </div>
+    </div>
+
+    <div id="result-page" class="hidden">
+        <div class="result-card">
+            <img id="result-img" class="result-image" src="" alt="意境图">
+            <span class="result-name" id="result-name"></span>
+            <span class="result-quote" id="result-quote"></span>
+            
+            <div class="result-section">
+                <span class="section-title">【文学风骨】</span>
+                <span class="section-content" id="desc-style"></span>
+            </div>
+            <div class="result-section">
+                <span class="section-title">【精神原乡】</span>
+                <span class="section-content" id="desc-spirit"></span>
+            </div>
+            <div class="result-section">
+                <span class="section-title">【致当下的你】</span>
+                <span class="section-content" id="desc-advice"></span>
+            </div>
+            
+            <div style="text-align: center;">
+                <button class="btn-action" onclick="location.reload()">再入梦境</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        { q: "若要在信笺落款处印一朵花，你会选：", a: ["海棠 —— 带着古典的哀愁", "罂粟 —— 危险而迷人的清醒", "雏菊 —— 荒野上的平凡真实", "仙人掌 —— 沙漠里的孤独自由", "木棉 —— 独立挺拔的温柔"], scores: [0,1,2,3,4] },
+        { q: "独处时，你更享受哪种“寂静”？", a: ["深院月色下的微凉", "繁华落尽后的荒凉", "北方大地的厚重", "异乡篝火旁的余烬", "窗明几净下的清醒"], scores: [0,1,2,3,4] },
+        { q: "你如何评价“孤独”二字？", a: ["是一种文人的清高", "是逃不掉的宿命", "是生存的底色", "是自由的最高境界", "是独立思考的必须"], scores: [0,1,2,3,4] },
+        { q: "面对不公，你的反应通常是：", a: ["付诸笔端，冷嘲热讽", "看穿一切，避世而立", "不甘屈服，竭力呐喊", "一走了之，去远方寻公义", "坚定发声，理智抗争"], scores: [0,1,2,3,4] },
+        { q: "若生活是一场戏剧，你希望自己是：", a: ["才华横溢的词圣", "冷眼看戏的观众", "真实生活的记录者", "流浪世界的旅人", "追求平权的开拓者"], scores: [0,1,2,3,4] },
+        { q: "你最喜欢的色彩基调是：", a: ["青绿山水的雅", "冷调紫色的忧", "泥土棕色的真", "大漠金色的烈", "纯粹白色的净"], scores: [0,1,2,3,4] },
+        { q: "关于“故乡”，你的感觉是：", a: ["梦里的温床", "想逃离的牢笼", "永远的伤痕", "漂泊的起点", "心灵的锚点"], scores: [0,1,2,3,4] },
+        { q: "哪种物件最能代表你的审美？", a: ["残缺的古墨", "华丽的旧旗袍", "一把带泥的锄头", "一双破旧的跑鞋", "一盏长明的台灯"], scores: [0,1,2,3,4] },
+        { q: "在人群中，你通常是：", a: ["温和但有距离感的", "沉默且犀利的", "有些笨拙但赤诚的", "热情且格格不入的", "温和坚定且理性的"], scores: [0,1,2,3,4] },
+        { q: "你认为女性最高级的力量是：", a: ["才情", "通透", "韧性", "自由", "自尊"], scores: [0,1,2,3,4] },
+        { q: "当爱情消失时，你会：", a: ["哀婉长叹，借酒消愁", "淡然一笑，早已预见", "心碎神伤，久久难愈", "挥手告别，奔向旷野", "保持尊严，体面转身"], scores: [0,1,2,3,4] },
+        { q: "你希望别人如何评价你？", a: ["风流雅致", "人间清醒", "朴实善良", "至情至性", "知性独立"], scores: [0,1,2,3,4] },
+        { q: "如果去流浪，你必带的一件东西：", a: ["文房四宝", "一面镜子", "一本泛黄的日记", "地图与烈酒", "一双坚韧的鞋"], scores: [0,1,2,3,4] },
+        { q: "你对“幸福”的理解是：", a: ["赌书消得泼茶香", "现世安稳，岁月静好", "在阳光下自由呼吸", "活在爱与美中", "自我价值的充分实现"], scores: [0,1,2,3,4] },
+        { q: "你最理想的离去方式是：", a: ["老在诗书里", "老在繁华里", "老在大地里", "老在远方里", "老在独立里"], scores: [0,1,2,3,4] }
+    ];
+
+    const results = [
+        {
+            name: "李清照",
+            img: "https://images.unsplash.com/photo-1576014131795-d440191a8e8b?auto=format&fit=crop&q=80&w=1000",
+            quote: "“和羞走，倚门回首，却把青梅嗅。”",
+            style: "你的文学风骨是‘词人之心’。你拥有极高的审美敏感度，能在枯燥的生活中捕捉细碎的美。你的文字（或是处世方式）充满了韵律感和古典的克制，清雅而冷傲。你擅长在哀婉中寻找美学，在孤独中建立自己的小世界。",
+            spirit: "你追求一种精神上的契合与高度。在你的世界里，金石文字、琴棋书画重于物质繁华。你的一生都在寻找那位能与你对饮、赌书消茶的知音。你的原乡不在地理位置，而是在那份跨越千年的雅致生活理想里。",
+            advice: "在快节奏的时代，不要怕自己的“慢”和“雅”显得过时。保持那份对生活的考究，即便在乱世或低谷，也要有‘倚门回首’的灵动与‘生当作人杰’的气魄。"
+        },
+        {
+            name: "张爱玲",
+            img: "https://images.unsplash.com/photo-1524397057410-1e775ed476f3?auto=format&fit=crop&q=80&w=1000",
+            quote: "“生命是一袭华美的袍，爬满了蚤子。”",
+            style: "你的文学风骨是‘苍凉的透视镜’。你早熟、理智，对人性有着刀锋般的解剖能力。你不屑于温情的假象，更愿意在废墟上观察尘世的真实繁华与荒凉。你的性格中有一种迷人的疏离感，像月光洒在废弃的弄堂。",
+            spirit: "你的原乡在繁华的都市角落。你追求极致的独立与个体价值，拒绝被任何宏大叙事裹挟。对你而言，自我的感受与现世的安稳胜过一切空洞的理想。你是一个清醒的旁观者，深谙人情世故却又不落俗套。",
+            advice: "清醒是你的护身符，也是你的孤独源头。你不需要向世界证明你的慈悲，只要保持那份通透即可。适当地允许自己沉溺于一些微小的、世俗的快乐。"
+        },
+        {
+            name: "萧红",
+            img: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=1000",
+            quote: "“满天星光，满屋月亮，人生何其如意。”",
+            style: "你的文学风骨是‘大地的呼吸’。你拥有近乎原始的敏锐感官，文字质质朴却有力，充满了对生命最基本的尊重与悲悯。你的灵魂是野生的，带着泥土的清香与寒意。你不在意技巧，只在意生命最真实的呐喊。",
+            spirit: "你的一生都在寻找温暖和逃离寒冷。虽然经历过动荡与流离，但你内心始终藏着一个名为“呼兰河”的后花园，那是你纯真与纯粹的避难所。你对苦难有天然的共情，这让你的人格散发出一种圣洁而粗粝的光芒。",
+            advice: "你容易被世界灼伤，因为你从不设防。请保护好你那份珍贵的赤子之心，但也请记住，你不仅可以做记录苦难的人，也可以做主宰自己命运的人。"
+        },
+        {
+            name: "三毛",
+            img: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&q=80&w=1000",
+            quote: "“如果有来生，要做一棵树，站成永恒，没有悲欢的姿势。”",
+            style: "你的文学风骨是‘异域的漂泊者’。你的人格中流淌着浪漫、不羁与极致的真诚。你拒绝被主流定义的“幸福”框定，你的生命是一场未完成的奇遇。你敢于把生活过成传奇，把远方变成日常。",
+            spirit: "撒哈拉是你的精神象征——贫瘠却热烈，孤独却自由。你的一生都在追求爱与自由的极致平衡。你认为生命不在于长度，而在于灵魂涉足过的广度。你对这个世界满怀深情，哪怕它有时让你心碎。",
+            advice: "流浪不仅是在地理上，更是在心灵上。当你感到困顿，记得你心底那座万水千山，那是谁也夺不走的自由领地。请继续勇敢地爱，勇敢地走。"
+        },
+        {
+            name: "舒婷",
+            img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=1000",
+            quote: "“我必须是你近旁的一株木棉，作为树的形象和你站在一起。”",
+            style: "你的文学风骨是‘坚韧的木棉’。你代表了觉醒的、现代的、有尊严的中国女性形象。你的感性与理性交织，温婉的外表下隐藏着不屈的骨架。你的文学世界是博大而平等的，充满着对理想生活的深沉热爱。",
+            spirit: "你向往平等的对话与深沉的联结。在你的价值观里，女性不需要依附，也不需要对抗，而是作为独立的生命个体，与伴侣、与社会并肩而立。你的原乡是那片充满人文关怀的现代文明沃土。",
+            advice: "坚守自尊与独立是你最大的力量。在这个嘈杂的时代，继续做那棵在风中挺拔的树。你不需要通过否定别人来证明自己，你的存在本身就是一种光亮。"
+        }
+    ];
+
+    let currentIdx = 0;
+    let finalScores = [0, 0, 0, 0, 0];
+
+    function startQuiz() {
+        document.getElementById('start-page').classList.add('hidden');
+        document.getElementById('quiz-page').classList.remove('hidden');
+        showQuestion();
+    }
+
+    function showQuestion() {
+        window.scrollTo(0, 0);
+        const q = questions[currentIdx];
+        document.getElementById('question-text').innerText = q.q;
+        document.getElementById('progress').style.width = ((currentIdx / questions.length) * 100) + '%';
+        
+        const list = document.getElementById('options-list');
+        list.innerHTML = ''; 
+
+        q.a.forEach((text, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = text;
+            btn.onclick = (e) => {
+                e.target.blur(); // 彻底移除焦点样式
+                select(q.scores[i]);
+            };
+            list.appendChild(btn);
+        });
+    }
+
+    function select(score) {
+        finalScores[score]++;
+        currentIdx++;
+        if (currentIdx < questions.length) {
+            showQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        document.getElementById('quiz-page').classList.add('hidden');
+        const maxIdx = finalScores.indexOf(Math.max(...finalScores));
+        const data = results[maxIdx];
+
+        document.getElementById('result-img').src = data.img;
+        document.getElementById('result-name').innerText = data.name;
+        document.getElementById('result-quote').innerText = data.quote;
+        document.getElementById('desc-style').innerText = data.style;
+        document.getElementById('desc-spirit').innerText = data.spirit;
+        document.getElementById('desc-advice').innerText = data.advice;
+
+        document.getElementById('result-page').classList.remove('hidden');
+    }
+</script>
+</body>
+</html>
